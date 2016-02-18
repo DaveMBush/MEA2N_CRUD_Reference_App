@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-lg-offset-3 col-lg-6">
+        <form class="form-horizontal"  [ngFormModel]="form">
+            <div class="form-group">
+                <label for="name" class="col-lg-3 control-label">Name:</label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="name" placeholder="name"
+                           [ngFormControl]="form.controls.name" />
+                    <div [hidden]="form.controls.name.valid || form.controls.name.pristine" class="alert alert-danger">Required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="sex" class="col-lg-3 control-label">Sex:</label>
+                <div class="col-lg-9">
+                    <input maxlength="1" type="text" class="form-control" id="sex" placeholder="sex"
+                           [ngFormControl]="form.controls.sex" />
+                    <div [hidden]="form.controls.sex.valid || form.controls.sex.pristine" class="alert alert-danger">Required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dob" class="col-lg-3 control-label">DOB:</label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="dob" placeholder="dob"
+                           [ngFormControl]="form.controls.dob" />
+                    <div [hidden]="form.controls.dob.valid || form.controls.dob.pristine" class="alert alert-danger">Required</div>
+                </div>
+            </div>
+            <button *ngIf="contact._id.length === 0" (click)="add()" class="btn btn-primary pull-right" [disabled]="!form.valid"><span class="fa fa-plus"></span> Add</button>
+            <button *ngIf="contact._id.length > 0" (click)="save()" class="btn btn-primary pull-right" [disabled]="!form.valid"><span class="fa fa fa-floppy-o"></span> Save</button>
+            <button (click)="cancel()" class="btn btn-default pull-right"><span class="fa fa fa-ban"></span> Cancel</button>
+        </form>
+    </div>
+</div>

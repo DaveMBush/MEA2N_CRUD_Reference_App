@@ -7,13 +7,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="#someItem of someList">
+    <tr *ngFor="let someItem of someList">
         <td>{{someItem.name}}</td>
         <td>{{someItem.sex}}</td>
         <td>{{someItem.dob | date:'shortDate'}}</td>
         <td>
             <button (click)="edit(someItem._id)" class="btn btn-default pull-right"><span class="fa fa-pencil"> Edit</span></button>
-            <button (click)="delete(someItem._id)" class="btn btn-default pull-right"><span class="fa fa-trash-o"> Delete</span></button>
+            <button (click)="remove(someItem._id)" class="btn btn-default pull-right"><span class="fa fa-trash-o"> Delete</span></button>
         </td>
     </tr>
     </tbody>

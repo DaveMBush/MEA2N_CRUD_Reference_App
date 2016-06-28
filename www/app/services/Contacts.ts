@@ -1,9 +1,9 @@
 /**
  * Created by dave on 2/17/2016.
  */
-import {Injectable} from 'angular2/core';
-import {Http, Headers} from 'angular2/http';
-import {Contact} from "../interfaces/Contact";
+import {Injectable} from '@angular/core';
+import {Http, Headers} from '@angular/http';
+//import {Contact} from "../interfaces/Contact";
 
 @Injectable()
 

@@ -1,9 +1,10 @@
-import { Component, OnInit }       from 'angular2/core';
+import { Component, OnInit }       from '@angular/core';
+import {NgForm} from '@angular/common';
 import {Contact} from "../interfaces/Contact";
 import {Contacts} from "../services/Contacts";
-import {RouteParams} from 'angular2/router';
-import {Router} from 'angular2/router';
-import {Control, FormBuilder, Validators, ControlGroup} from "angular2/common";
+import {RouteParams} from '@angular/router-deprecated';
+import {Router} from '@angular/router-deprecated';
+import {Control, FormBuilder, Validators, ControlGroup} from "@angular/common";
 
 @Component({
     templateUrl: 'app/edit/template.html',
@@ -12,17 +13,22 @@ import {Control, FormBuilder, Validators, ControlGroup} from "angular2/common";
 export class View implements OnInit {
     constructor(private contacts:Contacts,private routeParams:RouteParams, private router:Router,
                 private formBuilder:FormBuilder){
-        this.form = formBuilder.group({
-           'name': ['',Validators.required],
-            'sex': ['',Validators.required],
-            'dob': ['',Validators.compose([ Validators.required, this.isDate])]
-        });
+        this.model = {
+            name: '',
+            sex: '',
+            dob: ((new Date()).toLocaleDateString())
+        };
+         // this.form = formBuilder.group({
+         //    'name': ['',Validators.required],
+         //     'sex': ['',Validators.required],
+         //     'dob': ['',Validators.compose([ Validators.required, this.isDate])]
+         // });
     }
     isDate(c: Control){
         if(!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return {invalidDate:true};
     }
-    form;
+    model;
     someList: Contact[] = [];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
     ngOnInit() {
@@ -30,7 +36,7 @@ export class View implements OnInit {
         if(id){
             this.getContact(id);
         } else {
-            this.form.controls.dob.updateValue((new Date()).toLocaleDateString());
+            this.model.dob = ((new Date()).toLocaleDateString());
         }
 
     }
@@ -38,9 +44,9 @@ export class View implements OnInit {
         this.contacts.get(id).subscribe(
             data => {
                 this.contact._id = data._id;
-                this.form.controls.name.updateValue(data.name);
-                this.form.controls.sex.updateValue(data.sex);
-                this.form.controls.dob.updateValue(data.dob.toLocaleDateString());
+                this.model.name = (data.name);
+                this.model.sex = (data.sex);
+                this.model.dob = (data.dob.toLocaleDateString());
             },
             err => console.log(err));
     }
@@ -53,9 +59,9 @@ export class View implements OnInit {
        setTimeout(() => this.router.navigate(['/View']),1 );
     }
     fillContactFromForm(){
-        this.contact.dob = new Date(this.form.controls.dob.value);
-        this.contact.name = this.form.controls.name.value;
-        this.contact.sex = this.form.controls.sex.value;
+        this.contact.dob = new Date(this.model.dob);
+        this.contact.name = this.model.name;
+        this.contact.sex = this.model.sex;
     }
     add(){
         this.fillContactFromForm();

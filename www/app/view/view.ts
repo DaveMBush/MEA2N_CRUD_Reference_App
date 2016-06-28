@@ -1,7 +1,7 @@
-import { Component, OnInit }       from 'angular2/core';
+import { Component, OnInit }       from '@angular/core';
 import {Contact} from "../interfaces/Contact";
 import {Contacts} from "../services/Contacts";
-import {Router} from 'angular2/router';
+import {Router} from '@angular/router-deprecated';
 
 @Component({
     templateUrl: 'app/view/template.html',

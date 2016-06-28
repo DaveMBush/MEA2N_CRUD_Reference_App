@@ -1,8 +1,2 @@
-System.register([], function(exports_1) {
-    return {
-        setters:[],
-        execute: function() {
-        }
-    }
-});
+"use strict";
 //# sourceMappingURL=Contact.js.map

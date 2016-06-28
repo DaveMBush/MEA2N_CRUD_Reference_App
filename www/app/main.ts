@@ -1,4 +1,8 @@
-import {bootstrap}    from 'angular2/platform/browser'
-import {App} from './app'
+import {bootstrap}    from '@angular/platform-browser-dynamic';
+import {disableDeprecatedForms, provideForms} from '@angular/forms';
+import {AppComponent} from './app.component';
 import 'rxjs/Rx';
-bootstrap(App);
+bootstrap(AppComponent,[
+    disableDeprecatedForms(),
+    provideForms()
+]);

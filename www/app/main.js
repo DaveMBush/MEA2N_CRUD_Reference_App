@@ -1,17 +1,10 @@
-System.register(['angular2/platform/browser', './app', 'rxjs/Rx'], function(exports_1) {
-    var browser_1, app_1;
-    return {
-        setters:[
-            function (browser_1_1) {
-                browser_1 = browser_1_1;
-            },
-            function (app_1_1) {
-                app_1 = app_1_1;
-            },
-            function (_1) {}],
-        execute: function() {
-            browser_1.bootstrap(app_1.App);
-        }
-    }
-});
+"use strict";
+var platform_browser_dynamic_1 = require('@angular/platform-browser-dynamic');
+var forms_1 = require('@angular/forms');
+var app_component_1 = require('./app.component');
+require('rxjs/Rx');
+platform_browser_dynamic_1.bootstrap(app_component_1.AppComponent, [
+    forms_1.disableDeprecatedForms(),
+    forms_1.provideForms()
+]);
 //# sourceMappingURL=main.js.map

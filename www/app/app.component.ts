@@ -1,7 +1,6 @@
-///<reference path="../../node_modules/angular2/src/core/metadata.d.ts"/>
-import { Component }       from 'angular2/core';
-import {HTTP_PROVIDERS, Headers} from 'angular2/http';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
+import { Component }       from '@angular/core';
+import {HTTP_PROVIDERS, Headers} from '@angular/http';
+import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import { View } from './view/view';
 import { View as Edit} from './edit/view';
 
@@ -30,6 +29,6 @@ import { View as Edit} from './edit/view';
         HTTP_PROVIDERS
     ]
 })
-export class App {
+export class AppComponent {
 
 }

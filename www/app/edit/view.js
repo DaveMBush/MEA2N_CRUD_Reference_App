@@ -13,6 +13,7 @@ var Contacts_1 = require("../services/Contacts");
 var router_deprecated_1 = require('@angular/router-deprecated');
 var router_deprecated_2 = require('@angular/router-deprecated');
 var common_1 = require("@angular/common");
+var forms_1 = require('@angular/forms');
 var View = (function () {
     function View(contacts, routeParams, router, formBuilder) {
         this.contacts = contacts;
@@ -21,16 +22,11 @@ var View = (function () {
         this.formBuilder = formBuilder;
         this.someList = [];
         this.contact = { _id: '', name: '', sex: '', dob: new Date() };
-        this.model = {
-            name: '',
-            sex: '',
-            dob: ((new Date()).toLocaleDateString())
-        };
-        // this.form = formBuilder.group({
-        //    'name': ['',Validators.required],
-        //     'sex': ['',Validators.required],
-        //     'dob': ['',Validators.compose([ Validators.required, this.isDate])]
-        // });
+        this.form = formBuilder.group({
+            'name': ['', common_1.Validators.required],
+            'sex': ['', common_1.Validators.required],
+            'dob': [((new Date()).toLocaleDateString()), common_1.Validators.compose([common_1.Validators.required, this.isDate])]
+        });
     }
     View.prototype.isDate = function (c) {
         if (!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
@@ -41,17 +37,14 @@ var View = (function () {
         if (id) {
             this.getContact(id);
         }
-        else {
-            this.model.dob = ((new Date()).toLocaleDateString());
-        }
     };
     View.prototype.getContact = function (id) {
         var _this = this;
         this.contacts.get(id).subscribe(function (data) {
             _this.contact._id = data._id;
-            _this.model.name = (data.name);
-            _this.model.sex = (data.sex);
-            _this.model.dob = (data.dob.toLocaleDateString());
+            _this.form.controls.name.updateValue(data.name);
+            _this.form.controls.sex.updateValue(data.sex);
+            _this.form.controls.dob.updateValue(data.dob.toLocaleDateString());
         }, function (err) { return console.log(err); });
     };
     View.prototype.cancel = function () {
@@ -64,9 +57,9 @@ var View = (function () {
         setTimeout(function () { return _this.router.navigate(['/View']); }, 1);
     };
     View.prototype.fillContactFromForm = function () {
-        this.contact.dob = new Date(this.model.dob);
-        this.contact.name = this.model.name;
-        this.contact.sex = this.model.sex;
+        this.contact.dob = new Date(this.form.controls.dob.value);
+        this.contact.name = this.form.controls.name.value;
+        this.contact.sex = this.form.controls.sex.value;
     };
     View.prototype.add = function () {
         var _this = this;
@@ -83,7 +76,8 @@ var View = (function () {
     View = __decorate([
         core_1.Component({
             templateUrl: 'app/edit/template.html',
-            providers: [Contacts_1.Contacts]
+            providers: [Contacts_1.Contacts],
+            directives: [forms_1.REACTIVE_FORM_DIRECTIVES]
         }), 
         __metadata('design:paramtypes', [Contacts_1.Contacts, router_deprecated_1.RouteParams, router_deprecated_2.Router, common_1.FormBuilder])
     ], View);

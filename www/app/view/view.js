@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var Contacts_1 = require("../services/Contacts");
-var router_deprecated_1 = require('@angular/router-deprecated');
+var router_1 = require('@angular/router');
 var View = (function () {
     function View(contacts, router) {
         this.contacts = contacts;
@@ -27,22 +27,22 @@ var View = (function () {
         }, function (err) { return console.log(err); });
     };
     View.prototype.add = function () {
-        this.router.navigate(['Add']);
+        this.router.navigate(['add']);
     };
     View.prototype.edit = function (id) {
-        this.router.navigate(['Edit', { id: id }]);
+        this.router.navigate(['edit', id]);
     };
     View.prototype.remove = function (id) {
         var _this = this;
         this.contacts.delete(id)
-            .subscribe(function (x) { return _this.getContacts(); }, function (x) { return console.log(s); });
+            .subscribe(function (x) { return _this.getContacts(); });
     };
     View = __decorate([
         core_1.Component({
             templateUrl: 'app/view/template.html',
             providers: [Contacts_1.Contacts]
         }), 
-        __metadata('design:paramtypes', [Contacts_1.Contacts, router_deprecated_1.Router])
+        __metadata('design:paramtypes', [Contacts_1.Contacts, router_1.Router])
     ], View);
     return View;
 }());

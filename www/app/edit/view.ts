@@ -2,8 +2,7 @@ import { Component, OnInit }       from '@angular/core';
 import {NgForm} from '@angular/common';
 import {Contact} from "../interfaces/Contact";
 import {Contacts} from "../services/Contacts";
-import {RouteParams} from '@angular/router-deprecated';
-import {Router} from '@angular/router-deprecated';
+import {Router, ActivatedRoute} from '@angular/router';
 import {Control, FormBuilder, Validators, ControlGroup} from "@angular/common";
 import { REACTIVE_FORM_DIRECTIVES, FormGroup, FormControl } from '@angular/forms';
 
@@ -13,7 +12,7 @@ import { REACTIVE_FORM_DIRECTIVES, FormGroup, FormControl } from '@angular/forms
     directives: [REACTIVE_FORM_DIRECTIVES]
 })
 export class View implements OnInit {
-    constructor(private contacts:Contacts,private routeParams:RouteParams, private router:Router,
+    constructor(private contacts:Contacts, private router:Router, private route:ActivatedRoute,
                 private formBuilder:FormBuilder){
 
          this.form = formBuilder.group({
@@ -23,6 +22,7 @@ export class View implements OnInit {
          });
     }
     form;
+    private sub: any;
     isDate(c: Control){
         if(!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return {invalidDate:true};
@@ -30,11 +30,12 @@ export class View implements OnInit {
     someList: Contact[] = [];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
     ngOnInit() {
-        let id = this.routeParams.get('id');
-        if(id){
-            this.getContact(id);
-        }
-
+        this.sub = this.route.params.subscribe(params => {
+            let id = params['id'];
+            if(id){
+                this.getContact(id);
+            }
+        });
     }
     getContact(id){
         this.contacts.get(id).subscribe(
@@ -52,7 +53,7 @@ export class View implements OnInit {
         // keeps it refreshing in place.  I suspect it has
         // something to do with the event still being
         // active?
-       setTimeout(() => this.router.navigate(['/View']),1 );
+       setTimeout(() => this.router.navigate(['']),1 );
     }
     fillContactFromForm(){
         this.contact.dob = new Date(this.form.controls.dob.value);
@@ -62,13 +63,13 @@ export class View implements OnInit {
     add(){
         this.fillContactFromForm();
         this.contacts.add(this.contact)
-            .subscribe(x => this.router.navigate(['/View']),
+            .subscribe(x => this.router.navigate(['']),
             x => console.log(x));
     }
     save(){
         this.fillContactFromForm();
         this.contacts.save(this.contact)
-            .subscribe(x => this.router.navigate(['/View']),
+            .subscribe(x => this.router.navigate(['']),
                 x => console.log(x));
 
     }

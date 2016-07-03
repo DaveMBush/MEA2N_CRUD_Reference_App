@@ -10,37 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
-var router_deprecated_1 = require('@angular/router-deprecated');
+var router_1 = require('@angular/router');
 var view_1 = require('./view/view');
 var view_2 = require('./edit/view');
 var AppComponent = (function () {
     function AppComponent() {
     }
     AppComponent = __decorate([
-        router_deprecated_1.RouteConfig([
-            {
-                path: '/',
-                name: 'View',
-                component: view_1.View,
-                useAsDefault: true
-            }, {
-                path: '/edit/',
-                name: 'Add',
-                component: view_2.View
-            }, {
-                path: '/edit/:id',
-                name: 'Edit',
-                component: view_2.View
-            }
-        ]),
         core_1.Component({
             selector: 'my-app',
             templateUrl: 'app/template.html',
-            directives: [router_deprecated_1.ROUTER_DIRECTIVES],
+            directives: [router_1.ROUTER_DIRECTIVES],
             providers: [
-                router_deprecated_1.ROUTER_PROVIDERS,
                 http_1.HTTP_PROVIDERS
-            ]
+            ],
+            precompile: [view_1.View, view_2.View]
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

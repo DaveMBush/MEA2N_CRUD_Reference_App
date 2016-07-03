@@ -1,7 +1,7 @@
 import { Component, OnInit }       from '@angular/core';
 import {Contact} from "../interfaces/Contact";
 import {Contacts} from "../services/Contacts";
-import {Router} from '@angular/router-deprecated';
+import {Router} from '@angular/router';
 
 @Component({
     templateUrl: 'app/view/template.html',
@@ -21,15 +21,14 @@ export class View implements OnInit {
             err => console.log(err));
     }
     add(){
-        this.router.navigate(['Add']);
+        this.router.navigate(['add']);
     }
     edit(id){
-        this.router.navigate(['Edit',{id: id}]);
+        this.router.navigate(['edit', id]);
     }
     remove(id){
         this.contacts.delete(id)
             .subscribe(
-                x => this.getContacts(),
-                x => console.log(s));
+                x => this.getContacts());
     }
 }

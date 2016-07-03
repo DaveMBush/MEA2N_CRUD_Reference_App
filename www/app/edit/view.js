@@ -10,15 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var Contacts_1 = require("../services/Contacts");
-var router_deprecated_1 = require('@angular/router-deprecated');
-var router_deprecated_2 = require('@angular/router-deprecated');
+var router_1 = require('@angular/router');
 var common_1 = require("@angular/common");
 var forms_1 = require('@angular/forms');
 var View = (function () {
-    function View(contacts, routeParams, router, formBuilder) {
+    function View(contacts, router, route, formBuilder) {
         this.contacts = contacts;
-        this.routeParams = routeParams;
         this.router = router;
+        this.route = route;
         this.formBuilder = formBuilder;
         this.someList = [];
         this.contact = { _id: '', name: '', sex: '', dob: new Date() };
@@ -33,10 +32,13 @@ var View = (function () {
             return { invalidDate: true };
     };
     View.prototype.ngOnInit = function () {
-        var id = this.routeParams.get('id');
-        if (id) {
-            this.getContact(id);
-        }
+        var _this = this;
+        this.sub = this.route.params.subscribe(function (params) {
+            var id = params['id'];
+            if (id) {
+                _this.getContact(id);
+            }
+        });
     };
     View.prototype.getContact = function (id) {
         var _this = this;
@@ -54,7 +56,7 @@ var View = (function () {
         // keeps it refreshing in place.  I suspect it has
         // something to do with the event still being
         // active?
-        setTimeout(function () { return _this.router.navigate(['/View']); }, 1);
+        setTimeout(function () { return _this.router.navigate(['']); }, 1);
     };
     View.prototype.fillContactFromForm = function () {
         this.contact.dob = new Date(this.form.controls.dob.value);
@@ -65,13 +67,13 @@ var View = (function () {
         var _this = this;
         this.fillContactFromForm();
         this.contacts.add(this.contact)
-            .subscribe(function (x) { return _this.router.navigate(['/View']); }, function (x) { return console.log(x); });
+            .subscribe(function (x) { return _this.router.navigate(['']); }, function (x) { return console.log(x); });
     };
     View.prototype.save = function () {
         var _this = this;
         this.fillContactFromForm();
         this.contacts.save(this.contact)
-            .subscribe(function (x) { return _this.router.navigate(['/View']); }, function (x) { return console.log(x); });
+            .subscribe(function (x) { return _this.router.navigate(['']); }, function (x) { return console.log(x); });
     };
     View = __decorate([
         core_1.Component({
@@ -79,7 +81,7 @@ var View = (function () {
             providers: [Contacts_1.Contacts],
             directives: [forms_1.REACTIVE_FORM_DIRECTIVES]
         }), 
-        __metadata('design:paramtypes', [Contacts_1.Contacts, router_deprecated_1.RouteParams, router_deprecated_2.Router, common_1.FormBuilder])
+        __metadata('design:paramtypes', [Contacts_1.Contacts, router_1.Router, router_1.ActivatedRoute, common_1.FormBuilder])
     ], View);
     return View;
 }());

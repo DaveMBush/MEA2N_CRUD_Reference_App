@@ -77,7 +77,8 @@ var View = (function () {
     };
     View = __decorate([
         core_1.Component({
-            templateUrl: 'app/edit/template.html',
+            moduleId: module.id,
+            templateUrl: 'template.html',
             providers: [Contacts_1.Contacts],
             directives: [forms_1.REACTIVE_FORM_DIRECTIVES]
         }), 

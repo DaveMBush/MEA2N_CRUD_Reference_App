@@ -7,7 +7,8 @@ import {Control, FormBuilder, Validators, ControlGroup} from "@angular/common";
 import { REACTIVE_FORM_DIRECTIVES, FormGroup, FormControl } from '@angular/forms';
 
 @Component({
-    templateUrl: 'app/edit/template.html',
+    moduleId: module.id,
+    templateUrl: 'template.html',
     providers: [Contacts],
     directives: [REACTIVE_FORM_DIRECTIVES]
 })

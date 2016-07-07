@@ -39,7 +39,8 @@ var View = (function () {
     };
     View = __decorate([
         core_1.Component({
-            templateUrl: 'app/view/template.html',
+            moduleId: module.id,
+            templateUrl: 'template.html',
             providers: [Contacts_1.Contacts]
         }), 
         __metadata('design:paramtypes', [Contacts_1.Contacts, router_1.Router])

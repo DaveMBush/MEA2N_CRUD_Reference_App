@@ -4,7 +4,8 @@ import {Contacts} from "../services/Contacts";
 import {Router} from '@angular/router';
 
 @Component({
-    templateUrl: 'app/view/template.html',
+    moduleId: module.id,
+    templateUrl: 'template.html',
     providers: [Contacts]
 })
 export class View implements OnInit {

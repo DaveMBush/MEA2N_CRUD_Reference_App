@@ -6,7 +6,8 @@ import { View as Edit} from './edit/view';
 
 @Component({
     selector: 'my-app',
-    templateUrl: 'app/template.html',
+    moduleId: module.id,
+    templateUrl: 'template.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [
         HTTP_PROVIDERS

@@ -13,6 +13,7 @@ var Contacts_1 = require("../services/Contacts");
 var router_1 = require('@angular/router');
 var common_1 = require("@angular/common");
 var forms_1 = require('@angular/forms');
+var view_1 = require('../components/textField/view');
 var View = (function () {
     function View(contacts, router, route, formBuilder) {
         this.contacts = contacts;
@@ -24,10 +25,10 @@ var View = (function () {
         this.form = formBuilder.group({
             'name': ['', common_1.Validators.required],
             'sex': ['', common_1.Validators.required],
-            'dob': [((new Date()).toLocaleDateString()), common_1.Validators.compose([common_1.Validators.required, this.isDate])]
+            'dob': [((new Date()).toLocaleDateString()), common_1.Validators.compose([common_1.Validators.required, View.isDate])]
         });
     }
-    View.prototype.isDate = function (c) {
+    View.isDate = function (c) {
         if (!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return { invalidDate: true };
     };
@@ -80,7 +81,7 @@ var View = (function () {
             moduleId: module.id,
             templateUrl: 'template.html',
             providers: [Contacts_1.Contacts],
-            directives: [forms_1.REACTIVE_FORM_DIRECTIVES]
+            directives: [forms_1.REACTIVE_FORM_DIRECTIVES, view_1.TextField]
         }), 
         __metadata('design:paramtypes', [Contacts_1.Contacts, router_1.Router, router_1.ActivatedRoute, common_1.FormBuilder])
     ], View);

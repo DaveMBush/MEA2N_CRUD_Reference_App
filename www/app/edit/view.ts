@@ -1,16 +1,15 @@
-import { Component, OnInit }       from '@angular/core';
-import {NgForm} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {Contact} from "../interfaces/Contact";
 import {Contacts} from "../services/Contacts";
 import {Router, ActivatedRoute} from '@angular/router';
-import {Control, FormBuilder, Validators, ControlGroup} from "@angular/common";
-import { REACTIVE_FORM_DIRECTIVES, FormGroup, FormControl } from '@angular/forms';
-
+import {Control, FormBuilder, Validators} from "@angular/common";
+import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import {TextField} from '../components/textField/view';
 @Component({
     moduleId: module.id,
     templateUrl: 'template.html',
     providers: [Contacts],
-    directives: [REACTIVE_FORM_DIRECTIVES]
+    directives: [REACTIVE_FORM_DIRECTIVES,TextField]
 })
 export class View implements OnInit {
     constructor(private contacts:Contacts, private router:Router, private route:ActivatedRoute,
@@ -19,12 +18,12 @@ export class View implements OnInit {
          this.form = formBuilder.group({
             'name': ['',Validators.required],
              'sex': ['',Validators.required],
-             'dob': [((new Date()).toLocaleDateString()),Validators.compose([ Validators.required, this.isDate])]
+             'dob': [((new Date()).toLocaleDateString()),Validators.compose([ Validators.required, View.isDate])]
          });
     }
     form;
     private sub: any;
-    isDate(c: Control){
+    static isDate(c: Control){
         if(!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return {invalidDate:true};
     }

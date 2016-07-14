@@ -1,14 +1,7 @@
 <div class="row">
     <div class="col-lg-offset-3 col-lg-6">
         <form class="form-horizontal" [formGroup]="form" >
-            <div class="form-group">
-                <label for="name" class="col-lg-3 control-label">Name:</label>
-                <div class="col-lg-9">
-                    <input type="text" class="form-control" id="name" placeholder="name"
-                            formControlName="name" />
-                    <div *ngIf="form.controls.name.hasError('required')" class="alert alert-danger">Required</div>
-                </div>
-            </div>
+            <text-field fieldLabel="Name:" formControlName="name"></text-field>
             <div class="form-group">
                 <label for="sex" class="col-lg-3 control-label" >Sex:</label>
                 <div class="col-lg-9">

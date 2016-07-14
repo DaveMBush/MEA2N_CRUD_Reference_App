@@ -1,0 +1,7 @@
+<div class="form-group">
+    <label [attr.for]="formControlName" class="col-lg-3 control-label">{{fieldLabel}}</label>
+    <div class="col-lg-9">
+        <input type="text" class="form-control" placeholder="name" [(ngModel)]="value"
+               (blur)="onTouched()" [id]="formControlName" [required]="required"/>
+    </div>
+</div>

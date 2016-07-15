@@ -16,13 +16,14 @@ const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR = {
     // turn off the require indicator on the hosting element.
     styles: [':host.ng-invalid {border:none;}'],
     directives: [REACTIVE_FORM_DIRECTIVES],
-    inputs: ['fieldLabel', 'value', 'formControlName', 'required'],
+    inputs: ['fieldLabel', 'value', 'formControlName', 'required', 'errorMessage'],
     providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })
 export class TextField implements ControlValueAccessor{
     public fieldLabel: string;
     public formControlName: string;
     public required: boolean = false;
+    public errorMessage: string;
     //Placeholders for the callbacks
     private _onTouchedCallback: () => void = noop;
     private _onChangeCallback: (_:any) => void = noop;

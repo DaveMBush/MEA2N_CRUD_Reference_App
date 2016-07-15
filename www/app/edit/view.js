@@ -32,6 +32,12 @@ var View = (function () {
         if (!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return { invalidDate: true };
     };
+    View.prototype.getNameError = function () {
+        if (this.form.controls.name.errors) {
+            return 'Name field is required';
+        }
+        return '';
+    };
     View.prototype.ngOnInit = function () {
         var _this = this;
         this.sub = this.route.params.subscribe(function (params) {

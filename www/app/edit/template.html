@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-lg-offset-3 col-lg-6">
         <form class="form-horizontal" [formGroup]="form" >
-            <text-field fieldLabel="Name:" formControlName="name"></text-field>
+            <text-field fieldLabel="Name:" formControlName="name" [errorMessage]="getNameError()"></text-field>
             <div class="form-group">
                 <label for="sex" class="col-lg-3 control-label" >Sex:</label>
                 <div class="col-lg-9">

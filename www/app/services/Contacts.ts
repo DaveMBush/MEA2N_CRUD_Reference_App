@@ -1,12 +1,8 @@
-/**
- * Created by dave on 2/17/2016.
- */
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
-//import {Contact} from "../interfaces/Contact";
+
 
 @Injectable()
-
 export class Contacts {
     private baseUrl = '/api/contact/';
     headers: Headers = new Headers();

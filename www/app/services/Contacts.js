@@ -8,12 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Created by dave on 2/17/2016.
- */
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
-//import {Contact} from "../interfaces/Contact";
 var Contacts = (function () {
     function Contacts(http) {
         this.http = http;

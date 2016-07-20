@@ -30,6 +30,6 @@ export class View implements OnInit {
     remove(id){
         this.contacts.delete(id)
             .subscribe(
-                x => this.getContacts());
+                () => this.getContacts());
     }
 }

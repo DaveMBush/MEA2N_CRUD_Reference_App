@@ -35,6 +35,21 @@ export class View implements OnInit {
         }
         return '';
     }
+    getSexError(){
+        if(this.form.controls.sex.errors){
+            return 'Sex field is required';
+        }
+        return '';
+    }
+    getDobError(){
+        if(this.form.controls.dob.errors){
+            if(this.form.controls.dob.hasError('required')){
+                return 'DOB is required';
+            }
+            return 'Invalid Date';
+        }
+        return '';
+    }
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
             let id = params['id'];

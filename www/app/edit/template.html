@@ -1,18 +1,10 @@
 <div class="row">
     <div class="col-lg-offset-3 col-lg-6">
         <form class="form-horizontal" [formGroup]="form" >
-            <text-field fieldLabel="Name:" formControlName="name" [errorMessage]="getNameError()"></text-field>
-            <text-field fieldLabel="Sex:" formControlName="sex" [errorMessage]="getSexError()"></text-field>
-            <text-field fieldLabel="DOB:" formControlName="dob" [errorMessage]="getDobError()"></text-field>
-            <!--<div class="form-group">-->
-                <!--<label for="dob" class="col-lg-3 control-label">DOB:</label>-->
-                <!--<div class="col-lg-9">-->
-                    <!--<input type="text" class="form-control" id="dob" placeholder="dob"-->
-                           <!--formControlName="dob" />-->
-                    <!--<div *ngIf="form.controls.dob.hasError('required')" class="alert alert-danger">Required</div>-->
-                    <!--<div *ngIf="form.controls.dob.hasError('invalidDate')" class="alert alert-danger">Invalid Date</div>-->
-                <!--</div>-->
-            <!--</div>-->
+            <!-- formControlName is needed so the formBuilder.group() stuff knows what to bind to  -->
+            <text-field fieldLabel="Name:" formControlName="name" [ngFormControl]="form.controls.name" errorMessage="Name is required"></text-field>
+            <text-field fieldLabel="Sex:"  formControlName="sex" [ngFormControl]="form.controls.sex" errorMessage="Sex is required"></text-field>
+            <text-field fieldLabel="DOB:"  formControlName="dob" [ngFormControl]="form.controls.dob" [errorMessage]="getDobError()"></text-field>
             <button *ngIf="contact._id.length === 0" (click)="add()" class="btn btn-primary pull-right" [disabled]="!form.valid"><span class="fa fa-plus"></span> Add</button>
             <button *ngIf="contact._id.length > 0" (click)="save()" class="btn btn-primary pull-right" [disabled]="!form.valid"><span class="fa fa fa-floppy-o"></span> Save</button>
             <button (click)="cancel()" class="btn btn-default pull-right"><span class="fa fa fa-ban"></span> Cancel</button>

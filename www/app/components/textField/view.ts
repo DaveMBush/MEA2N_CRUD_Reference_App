@@ -1,5 +1,7 @@
-import { Component,forwardRef,ReflectiveInjector }       from '@angular/core';
-import {REACTIVE_FORM_DIRECTIVES, NG_VALUE_ACCESSOR, ControlValueAccessor, NgControl} from '@angular/forms';
+import {Component, forwardRef}       from '@angular/core';
+import {
+    REACTIVE_FORM_DIRECTIVES, NG_VALUE_ACCESSOR, ControlValueAccessor
+} from '@angular/forms';
 import {NgFormControl} from "@angular/common";
 
 
@@ -16,18 +18,16 @@ const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR = {
     templateUrl: 'template.html',
     // turn off the require indicator on the hosting element.
     directives: [REACTIVE_FORM_DIRECTIVES],
-    inputs: ['fieldLabel', 'value', 'errorMessage' , 'ngFormControl'],
+    inputs: ['fieldLabel', 'value'],
     providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR, NgFormControl]
 })
 export class TextField implements ControlValueAccessor{
     public fieldLabel: string;
-    public errorMessage: string;
-    public ngFormControl: NgFormControl;
     //Placeholders for the callbacks
     private _onTouchedCallback: () => void = noop;
     private _onChangeCallback: (_:any) => void = noop;
-
     constructor(){
+
     }
 
     writeValue(obj:any):void {

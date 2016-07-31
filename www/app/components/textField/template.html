@@ -3,6 +3,6 @@
     <div class="col-lg-9">
         <input type="text" class="form-control" placeholder="name" [(ngModel)]="value"
                (blur)="onTouched()" [id]="formControlName" [required]="required"/>
-        <div *ngIf="ngFormControl.errors" class="alert alert-danger">{{errorMessage}}</div>
+        <ng-content></ng-content>
     </div>
 </div>

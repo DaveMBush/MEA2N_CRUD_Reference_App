@@ -29,27 +29,6 @@ export class View implements OnInit {
     }
     someList: Contact[] = [];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
-    getNameError(){
-        if(this.form.controls.name.errors){
-            return 'Name field is required';
-        }
-        return '';
-    }
-    getSexError(){
-        if(this.form.controls.sex.errors){
-            return 'Sex field is required';
-        }
-        return '';
-    }
-    getDobError(){
-        if(this.form.controls.dob.errors){
-            if(this.form.controls.dob.hasError('required')){
-                return 'DOB is required';
-            }
-            return 'Invalid Date';
-        }
-        return '';
-    }
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
             let id = params['id'];

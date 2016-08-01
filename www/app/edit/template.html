@@ -5,9 +5,9 @@
             <text-field fieldLabel="Name:" formControlName="name">
                 <div *ngIf="form.controls.name.errors" class="alert alert-danger">Name is required</div>
             </text-field>
-            <text-field fieldLabel="Sex:"  formControlName="sex">
+            <dropdown-field fieldLabel="Sex:"  formControlName="sex" [tableData]="sexArray">
                 <div *ngIf="form.controls.sex.errors" class="alert alert-danger">Sex is required</div>
-            </text-field>
+            </dropdown-field>
             <text-field fieldLabel="DOB:"  formControlName="dob">
                 <div *ngIf="form.controls.dob.hasError('required')" class="alert alert-danger">DOB is required</div>
                 <div *ngIf="form.controls.dob.hasError('invalidDate')" class="alert alert-danger">DOB should be a date</div>

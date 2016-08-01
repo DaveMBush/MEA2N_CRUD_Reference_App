@@ -5,11 +5,13 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {Control, FormBuilder, Validators} from "@angular/common";
 import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 import {TextField} from '../components/textField/view';
+import {DropdownField} from '../components/dropdownField/view';
+
 @Component({
     moduleId: module.id,
     templateUrl: 'template.html',
     providers: [Contacts],
-    directives: [REACTIVE_FORM_DIRECTIVES,TextField]
+    directives: [REACTIVE_FORM_DIRECTIVES,TextField,DropdownField]
 })
 export class View implements OnInit {
     constructor(private contacts:Contacts, private router:Router, private route:ActivatedRoute,
@@ -27,6 +29,7 @@ export class View implements OnInit {
         if(!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return {invalidDate:true};
     }
+    sexArray: any[] = [{name: 'Male', val: 'M'},{name: 'Female', val: 'F'}];
     someList: Contact[] = [];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
     ngOnInit() {

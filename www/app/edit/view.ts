@@ -1,31 +1,33 @@
+///<reference path="../../../node_modules/@angular/common/src/forms-deprecated/validators.d.ts"/>
 import { Component, OnInit } from '@angular/core';
 import {Contact} from "../interfaces/Contact";
 import {Contacts} from "../services/Contacts";
 import {Router, ActivatedRoute} from '@angular/router';
-import {Control, FormBuilder, Validators} from "@angular/common";
-import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
 import {TextField} from '../components/textField/view';
 import {DropdownField} from '../components/dropdownField/view';
 
 @Component({
     moduleId: module.id,
     templateUrl: 'template.html',
-    providers: [Contacts],
-    directives: [REACTIVE_FORM_DIRECTIVES,TextField,DropdownField]
+    providers: [Contacts, FormBuilder],
+    directives: [TextField,DropdownField]
 })
 export class View implements OnInit {
     constructor(private contacts:Contacts, private router:Router, private route:ActivatedRoute,
                 private formBuilder:FormBuilder){
 
-         this.form = formBuilder.group({
-            'name': ['',Validators.required],
-             'sex': ['',Validators.required],
-             'dob': [((new Date()).toLocaleDateString()),Validators.compose([ Validators.required, View.isDate])]
-         });
+
+        this.form = formBuilder.group({
+           name: ['',Validators.required],
+            sex: ['',Validators.required],
+            dob: [((new Date()).toLocaleDateString()),Validators.compose([ Validators.required, View.isDate])]
+        });
+
     }
-    form;
+    form: FormGroup;
     private sub: any;
-    static isDate(c: Control){
+    static isDate(c: FormControl){
         if(!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return {invalidDate:true};
     }
@@ -44,9 +46,9 @@ export class View implements OnInit {
         this.contacts.get(id).subscribe(
             data => {
                 this.contact._id = data._id;
-                this.form.controls.name.updateValue(data.name);
-                this.form.controls.sex.updateValue(data.sex);
-                this.form.controls.dob.updateValue(data.dob.toLocaleDateString());
+                this.form.controls['name'].setValue(data.name);
+                this.form.controls['sex'].setValue(data.sex);
+                this.form.controls['dob'].setValue(data.dob.toLocaleDateString());
             },
             err => console.log(err));
     }
@@ -59,9 +61,9 @@ export class View implements OnInit {
        setTimeout(() => this.router.navigate(['']),1 );
     }
     fillContactFromForm(){
-        this.contact.dob = new Date(this.form.controls.dob.value);
-        this.contact.name = this.form.controls.name.value;
-        this.contact.sex = this.form.controls.sex.value;
+        this.contact.dob = new Date(this.form.controls['dob'].value);
+        this.contact.name = this.form.controls['name'].value;
+        this.contact.sex = this.form.controls['sex'].value;
     }
     add(){
         this.fillContactFromForm();

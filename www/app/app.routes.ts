@@ -1,8 +1,8 @@
-import { provideRouter, RouterConfig } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { View } from './view/view';
 import { View as Edit} from './edit/view';
 
-export const routes: RouterConfig = [
+export const routes: Routes = [
         {
             path: '',
             component: View,
@@ -15,6 +15,4 @@ export const routes: RouterConfig = [
         }
 ];
 
-export const APP_ROUTER_PROVIDERS = [
-    provideRouter(routes)
-];
+export const routing = RouterModule.forRoot(routes);

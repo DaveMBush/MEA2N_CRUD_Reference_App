@@ -1,9 +1,9 @@
 <div class="form-group">
     <label [attr.for]="formControlName" class="col-lg-3 control-label">{{fieldLabel}}</label>
     <div class="col-lg-9">
-        <select class="form-control"  [(ngModel)]="value"
+        <select class="form-control"  [(ngModel)]="value" [title]="fieldLabel"
                (blur)="onTouched()" [id]="formControlName" [required]="required">
-            <option *ngFor="#oo of tableData" [value]="oo.val">{{oo.name}}</option>
+            <option *ngFor="let oo of tableData" [value]="oo.val">{{oo.name}}</option>
         </select>
         <ng-content></ng-content>
     </div>

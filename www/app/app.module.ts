@@ -10,7 +10,7 @@ import { View as Edit} from './edit/view';
 
 @NgModule({
     imports:      [ BrowserModule, FormsModule, HttpModule, routing ],
-    declarations: [ AppComponent, View, Edit ],
+    declarations: [ View, Edit, AppComponent ],
     bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

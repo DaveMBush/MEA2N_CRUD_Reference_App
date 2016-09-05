@@ -1,17 +1,13 @@
-///<reference path="../../../node_modules/@angular/common/src/forms-deprecated/validators.d.ts"/>
 import { Component, OnInit } from '@angular/core';
 import {Contact} from "../interfaces/Contact";
 import {Contacts} from "../services/Contacts";
 import {Router, ActivatedRoute} from '@angular/router';
-import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
-import {TextField} from '../components/textField/view';
-import {DropdownField} from '../components/dropdownField/view';
+import {FormGroup, Validators, FormBuilder, FormControl, ControlContainer} from '@angular/forms';
 
 @Component({
     moduleId: module.id,
     templateUrl: 'template.html',
-    providers: [Contacts, FormBuilder],
-    directives: [TextField,DropdownField]
+    providers: [Contacts, FormBuilder, ControlContainer]
 })
 export class View implements OnInit {
     constructor(private contacts:Contacts, private router:Router, private route:ActivatedRoute,

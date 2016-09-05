@@ -1,8 +1,7 @@
 import {Component, forwardRef}       from '@angular/core';
 import {
-    REACTIVE_FORM_DIRECTIVES, NG_VALUE_ACCESSOR, ControlValueAccessor
+    NG_VALUE_ACCESSOR, ControlValueAccessor
 } from '@angular/forms';
-import {NgFormControl} from "@angular/common";
 
 
 const noop = () => {};
@@ -17,9 +16,8 @@ const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR = {
     moduleId: module.id,
     templateUrl: 'template.html',
     // turn off the require indicator on the hosting element.
-    directives: [REACTIVE_FORM_DIRECTIVES],
     inputs: ['fieldLabel', 'value', 'tableData'],
-    providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR, NgFormControl]
+    providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })
 export class DropdownField implements ControlValueAccessor{
     public fieldLabel: string;

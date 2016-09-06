@@ -5,12 +5,12 @@ import { HttpModule }     from '@angular/http';
 import { AppComponent }  from './app.component';
 import { routing }        from './app.routes';
 import { View } from './view/view';
-import { View as Edit} from './edit/view';
 import {ComponentsModule} from './components/components.module';
+import {EditModule} from "./edit/edit.module";
 
 @NgModule({
-    imports:      [ BrowserModule, HttpModule, routing , ReactiveFormsModule, ComponentsModule],
-    declarations: [ View, Edit, AppComponent ],
+    imports:      [ BrowserModule, HttpModule, routing , ReactiveFormsModule, ComponentsModule, EditModule],
+    declarations: [ View, AppComponent ],
     bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

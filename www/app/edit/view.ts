@@ -1,28 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import {Contact} from "../interfaces/Contact";
+import {Contact} from "../models/Contact";
 import {Contacts} from "../services/Contacts";
 import {Router, ActivatedRoute} from '@angular/router';
-import {FormGroup, Validators, FormBuilder, FormControl, ControlContainer} from '@angular/forms';
+import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
 
 @Component({
     moduleId: module.id,
-    templateUrl: 'template.html',
-    providers: [Contacts, FormBuilder, ControlContainer]
+    templateUrl: 'template.html'
 })
 export class View implements OnInit {
     constructor(private contacts:Contacts, private router:Router, private route:ActivatedRoute,
                 private formBuilder:FormBuilder){
-
-
         this.form = formBuilder.group({
            name: ['',Validators.required],
             sex: ['',Validators.required],
             dob: [((new Date()).toLocaleDateString()),Validators.compose([ Validators.required, View.isDate])]
         });
-
     }
     form: FormGroup;
-    private sub: any;
     static isDate(c: FormControl){
         if(!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return {invalidDate:true};
@@ -31,23 +26,23 @@ export class View implements OnInit {
     someList: Contact[] = [];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
     ngOnInit() {
-        this.sub = this.route.params.subscribe(params => {
-            let id = params['id'];
-            if(id){
-                this.getContact(id);
-            }
-        });
+        // this.sub = this.route.params.subscribe(params => {
+        //     let id = params['id'];
+        //     if(id){
+        //         this.getContact(id);
+        //     }
+        // });
     }
-    getContact(id){
-        this.contacts.get(id).subscribe(
-            data => {
-                this.contact._id = data._id;
-                this.form.controls['name'].setValue(data.name);
-                this.form.controls['sex'].setValue(data.sex);
-                this.form.controls['dob'].setValue(data.dob.toLocaleDateString());
-            },
-            err => console.log(err));
-    }
+    // getContact(id){
+    //     this.contacts.get(id).subscribe(
+    //         data => {
+    //             this.contact._id = data._id;
+    //             this.form.controls['name'].setValue(data.name);
+    //             this.form.controls['sex'].setValue(data.sex);
+    //             this.form.controls['dob'].setValue(data.dob.toLocaleDateString());
+    //         },
+    //         err => console.log(err));
+    // }
     cancel(){
         // something about calling navigate directly causes
         // the root page to completely refresh.  setTimeout
@@ -63,6 +58,7 @@ export class View implements OnInit {
     }
     add(){
         this.fillContactFromForm();
+
         this.contacts.add(this.contact)
             .subscribe(x => this.router.navigate(['']),
             x => console.log(x));

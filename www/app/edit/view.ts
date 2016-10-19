@@ -1,16 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import {Contact} from "../models/Contact";
-import {Contacts} from "../services/Contacts";
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
+import {Store} from '@ngrx/store';
+import {AppState} from '../state/interfaces/AppState';
+import {ContactActions} from "../state/actions/ContactActions";
+import {Observable} from "rxjs";
 
 @Component({
     moduleId: module.id,
     templateUrl: 'template.html'
 })
 export class View implements OnInit {
-    constructor(private contacts:Contacts, private router:Router, private route:ActivatedRoute,
-                private formBuilder:FormBuilder){
+    private contacts: Observable<Array<Contact>>;
+    constructor(private router:Router, private route:ActivatedRoute,
+                private formBuilder:FormBuilder,
+                private store: Store<AppState>
+    ){
+        this.contacts = <Observable<Array<Contact>>>store.select('contacts');
         this.form = formBuilder.group({
            name: ['',Validators.required],
             sex: ['',Validators.required],
@@ -23,26 +30,27 @@ export class View implements OnInit {
             return {invalidDate:true};
     }
     sexArray: any[] = [{name: 'Male', val: 'M'},{name: 'Female', val: 'F'}];
-    someList: Contact[] = [];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
     ngOnInit() {
-        // this.sub = this.route.params.subscribe(params => {
-        //     let id = params['id'];
-        //     if(id){
-        //         this.getContact(id);
-        //     }
-        // });
+        this.route.params.subscribe(params => {
+            let id = params['id'];
+            if(id){
+                this.getContact(id);
+            }
+        });
     }
-    // getContact(id){
-    //     this.contacts.get(id).subscribe(
-    //         data => {
-    //             this.contact._id = data._id;
-    //             this.form.controls['name'].setValue(data.name);
-    //             this.form.controls['sex'].setValue(data.sex);
-    //             this.form.controls['dob'].setValue(data.dob.toLocaleDateString());
-    //         },
-    //         err => console.log(err));
-    // }
+    getContact(id){
+        this.contacts.subscribe(
+            contacts => contacts
+                .filter(contact => contact._id === id)
+                .map(contact => {
+                    this.contact._id = contact._id;
+                    this.form.controls['name'].setValue(contact.name);
+                    this.form.controls['sex'].setValue(contact.sex);
+                    this.form.controls['dob'].setValue(contact.dob.toLocaleDateString());
+                })
+        );
+    }
     cancel(){
         // something about calling navigate directly causes
         // the root page to completely refresh.  setTimeout
@@ -58,17 +66,13 @@ export class View implements OnInit {
     }
     add(){
         this.fillContactFromForm();
-
-        this.contacts.add(this.contact)
-            .subscribe(x => this.router.navigate(['']),
-            x => console.log(x));
+        this.contact._id = '1';
+        this.store.dispatch(ContactActions.add(this.contact));
+        setTimeout(() => this.router.navigate(['']),1 );
     }
     save(){
         this.fillContactFromForm();
-        this.contacts.save(this.contact)
-            .subscribe(x => this.router.navigate(['']),
-                x => console.log(x));
-
+        this.store.dispatch(ContactActions.update(this.contact));
+        setTimeout(() => this.router.navigate(['']),1 );
     }
-
 }

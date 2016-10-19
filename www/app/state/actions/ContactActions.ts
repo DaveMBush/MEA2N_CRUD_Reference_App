@@ -1,9 +1,7 @@
-import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
 
 import {Contact} from '../../models/Contact';
 
-@Injectable()
 export class ContactActions {
     static LIST = 'ContactActions.1';
     static list(): Action{
@@ -19,8 +17,15 @@ export class ContactActions {
         return {type: ContactActions.UPDATE, payload: contact}
     }
 
-    static DELETE = 'ContactActions.4';
+    static REMOVE = 'ContactActions.4';
     static remove(id: number){
-        return {type: ContactActions.DELETE, payload: id}
+        return {type: ContactActions.REMOVE, payload: id}
     }
+
+    static GET = 'ContactActions.5';
+    static get(id: number){
+        return {type: ContactActions.GET, payload: id}
+    }
+
+
 }

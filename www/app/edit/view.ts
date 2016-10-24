@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Contact} from "../models/Contact";
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {AppState} from '../state/interfaces/AppState';
 import {ContactActions} from "../state/actions/ContactActions";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
     moduleId: module.id,
     templateUrl: 'template.html'
 })
-export class View implements OnInit {
+export class View implements OnInit, OnDestroy {
     private observableContact: Observable<Contact>;
+    private contactSubscription: Subscription;
     constructor(private router:Router, private route:ActivatedRoute,
                 private formBuilder:FormBuilder,
                 private store: Store<AppState>
@@ -40,8 +41,13 @@ export class View implements OnInit {
             }
         });
     }
+    ngOnDestroy(): void {
+        if(this.contactSubscription){
+            this.contactSubscription.unsubscribe();
+        }
+    }
     getContact(id){
-        this.observableContact.subscribe(
+        this.contactSubscription = this.observableContact.subscribe(
             contact =>
             {
                 this.contact._id = contact._id;

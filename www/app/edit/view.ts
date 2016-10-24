@@ -12,16 +12,17 @@ import {Observable} from "rxjs";
     templateUrl: 'template.html'
 })
 export class View implements OnInit {
-    private contacts: Observable<Array<Contact>>;
+    private observableContact: Observable<Contact>;
     constructor(private router:Router, private route:ActivatedRoute,
                 private formBuilder:FormBuilder,
                 private store: Store<AppState>
     ){
-        this.contacts = <Observable<Array<Contact>>>store.select('contacts');
+        this.observableContact = <Observable<Contact>>store.select('contact');
         this.form = formBuilder.group({
            name: ['',Validators.required],
             sex: ['',Validators.required],
-            dob: [((new Date()).toLocaleDateString()),Validators.compose([ Validators.required, View.isDate])]
+            dob: [((new Date()).toLocaleDateString()),
+                Validators.compose([ Validators.required, View.isDate])]
         });
     }
     form: FormGroup;
@@ -40,16 +41,17 @@ export class View implements OnInit {
         });
     }
     getContact(id){
-        this.contacts.subscribe(
-            contacts => contacts
-                .filter(contact => contact._id === id)
-                .map(contact => {
-                    this.contact._id = contact._id;
-                    this.form.controls['name'].setValue(contact.name);
-                    this.form.controls['sex'].setValue(contact.sex);
-                    this.form.controls['dob'].setValue(contact.dob.toLocaleDateString());
-                })
+        this.observableContact.subscribe(
+            contact =>
+            {
+                this.contact._id = contact._id;
+                this.form.controls['name'].setValue(contact.name);
+                this.form.controls['sex'].setValue(contact.sex);
+                var dob = contact.dob.toLocaleDateString();
+                this.form.controls['dob'].setValue(dob);
+            }
         );
+        this.store.dispatch(ContactActions.get(id));
     }
     cancel(){
         // something about calling navigate directly causes

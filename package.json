@@ -31,6 +31,7 @@
     "zone.js": "^0.6.17"
   },
   "devDependencies": {
+    "@ngrx/effects": "^2.0.0",
     "angular2-template-loader": "^0.4.0",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",

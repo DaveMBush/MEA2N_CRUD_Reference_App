@@ -1,4 +1,4 @@
-import { Component, OnInit }       from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy}       from '@angular/core';
 import {Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {ContactActions} from "../state/actions/ContactActions";
@@ -9,9 +9,10 @@ import {Contact} from "../models/Contact";
 @Component({
     moduleId: module.id,
     templateUrl: 'template.html',
-    providers: []
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class View implements OnInit {
+
     private contacts: Observable<Array<Contact>>;
     constructor(
         private store: Store<AppState>,
@@ -26,6 +27,7 @@ export class View implements OnInit {
         this.router.navigate(['add']);
     }
     edit(id){
+        console.log('View - id: ' + JSON.stringify(id));
         this.router.navigate(['edit', id]);
     }
     remove(id){

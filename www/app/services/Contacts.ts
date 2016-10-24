@@ -3,7 +3,6 @@ import {Http, Headers} from '@angular/http';
 import {Contact} from "../models/Contact";
 import {Observable} from 'rxjs';
 
-
 @Injectable()
 export class Contacts {
     private baseUrl = '/api/contact/';
@@ -16,18 +15,20 @@ export class Contacts {
         return this.http.post(this.baseUrl,JSON.stringify(contact),{headers:this.headers})
             .map(x => x.json());
     }
-    list(): Observable<Contact[]>{
+    list(): Observable<Array<Contact>>{
         return this.http.get(this.baseUrl)
             .map(res => res.json())
-            .map((contacts: Array<Contact>) =>
-            {
-                return contacts;
-            });
+            .map((contacts: Array<Contact>) => contacts );
     }
-    get(id){
+    get(id): Observable<Contact>{
         return this.http.get(this.baseUrl + id)
-            .map(res => res.json())
-            .map(contact => {
+            .map(res =>{
+                return res.json();
+            })
+            .map((contact: Contact) => {
+                // the get returns the date as a string.
+                //noinspection TypeScriptUnresolvedFunction
+                contact.dob = <Date>new Date(contact.dob);
                 return contact;
             });
     }

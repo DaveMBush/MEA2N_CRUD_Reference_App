@@ -6,6 +6,7 @@ router.route('/contact/:id')
         Contact.findById(req.params.id,function(err,contact){
             if(err){
                 res.send(err);
+                return;
             }
             res.setHeader('Content-Type', 'application/json');
             res.json(contact);

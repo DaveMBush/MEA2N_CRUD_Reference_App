@@ -2,9 +2,11 @@ import { ActionReducer, Action } from '@ngrx/store';
 import { Contact } from '../../models/Contact';
 import { ContactActions } from '../actions/ContactActions';
 
-export const ContactsReducer: ActionReducer<Array<Contact>> = (state: Array<Contact> = [], action: Action) => {
+export const ContactReducer: ActionReducer<Contact> =
+    (state: Contact = <Contact>{_id:'',name:'',sex:'',dob: new Date()},
+     action: Action) => {
     switch (action.type) {
-        case ContactActions.LIST_SUCCESS:
+        case ContactActions.GET_SUCCESS:
             return action.payload;
         default:
             return state;

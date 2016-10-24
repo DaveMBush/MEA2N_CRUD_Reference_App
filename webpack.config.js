@@ -57,4 +57,4 @@ module.exports = {
         }),
         new ExtractTextPlugin('[name].[hash].css')
     ]
-}
+};

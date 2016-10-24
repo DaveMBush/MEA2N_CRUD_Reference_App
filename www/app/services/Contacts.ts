@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
-
+import {Contact} from "../models/Contact";
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class Contacts {
@@ -10,32 +11,32 @@ export class Contacts {
         // We don't seem to be able to inject this?!
         this.headers.append('Content-Type','application/json');
     }
-    add(contact){
+    add(contact: Contact){
         return this.http.post(this.baseUrl,JSON.stringify(contact),{headers:this.headers})
             .map(x => x.json());
     }
-    public list(){
+    list(): Observable<Array<Contact>>{
         return this.http.get(this.baseUrl)
             .map(res => res.json())
-            .map((contacts: Array<any>) =>
-            {
-                contacts.forEach(contact => contact.dob = new Date(contact.dob));
-                return contacts;
-            });
+            .map((contacts: Array<Contact>) => contacts );
     }
-    get(id){
+    get(id): Observable<Contact>{
         return this.http.get(this.baseUrl + id)
-            .map(res => res.json())
-            .map(contact => {
-                contact.dob = new Date(contact.dob);
+            .map(res =>{
+                return res.json();
+            })
+            .map((contact: Contact) => {
+                // the get returns the date as a string.
+                //noinspection TypeScriptUnresolvedFunction
+                contact.dob = <Date>new Date(contact.dob);
                 return contact;
             });
     }
-    save(contact){
+    save(contact: Contact){
         return this.http.post(this.baseUrl + contact._id,JSON.stringify(contact),{headers: this.headers})
             .map(res => res.json());
     }
-    delete(id){
+    remove(id: number){
         return this.http.delete(this.baseUrl + id)
             .map(res=> res.json());
     }

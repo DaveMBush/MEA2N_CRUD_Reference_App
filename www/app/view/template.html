@@ -7,7 +7,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let someItem of someList">
+    <tr *ngFor="let someItem of (contacts | async)">
         <td>{{someItem.name}}</td>
         <td>{{someItem.sex}}</td>
         <td>{{someItem.dob | date:'shortDate'}}</td>

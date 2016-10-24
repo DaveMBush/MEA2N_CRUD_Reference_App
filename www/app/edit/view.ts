@@ -1,52 +1,63 @@
-import { Component, OnInit } from '@angular/core';
-import {Contact} from "../interfaces/Contact";
-import {Contacts} from "../services/Contacts";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Contact} from "../models/Contact";
 import {Router, ActivatedRoute} from '@angular/router';
-import {FormGroup, Validators, FormBuilder, FormControl, ControlContainer} from '@angular/forms';
+import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
+import {Store} from '@ngrx/store';
+import {AppState} from '../state/interfaces/AppState';
+import {ContactActions} from "../state/actions/ContactActions";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
     moduleId: module.id,
-    templateUrl: 'template.html',
-    providers: [Contacts, FormBuilder, ControlContainer]
+    templateUrl: 'template.html'
 })
-export class View implements OnInit {
-    constructor(private contacts:Contacts, private router:Router, private route:ActivatedRoute,
-                private formBuilder:FormBuilder){
-
-
+export class View implements OnInit, OnDestroy {
+    private observableContact: Observable<Contact>;
+    private contactSubscription: Subscription;
+    constructor(private router:Router, private route:ActivatedRoute,
+                private formBuilder:FormBuilder,
+                private store: Store<AppState>
+    ){
+        this.observableContact = <Observable<Contact>>store.select('contact');
         this.form = formBuilder.group({
            name: ['',Validators.required],
             sex: ['',Validators.required],
-            dob: [((new Date()).toLocaleDateString()),Validators.compose([ Validators.required, View.isDate])]
+            dob: [((new Date()).toLocaleDateString()),
+                Validators.compose([ Validators.required, View.isDate])]
         });
-
     }
     form: FormGroup;
-    private sub: any;
     static isDate(c: FormControl){
         if(!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return {invalidDate:true};
     }
     sexArray: any[] = [{name: 'Male', val: 'M'},{name: 'Female', val: 'F'}];
-    someList: Contact[] = [];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
     ngOnInit() {
-        this.sub = this.route.params.subscribe(params => {
+        this.route.params.subscribe(params => {
             let id = params['id'];
             if(id){
                 this.getContact(id);
             }
         });
     }
+    ngOnDestroy(): void {
+        if(this.contactSubscription){
+            this.contactSubscription.unsubscribe();
+        }
+    }
     getContact(id){
-        this.contacts.get(id).subscribe(
-            data => {
-                this.contact._id = data._id;
-                this.form.controls['name'].setValue(data.name);
-                this.form.controls['sex'].setValue(data.sex);
-                this.form.controls['dob'].setValue(data.dob.toLocaleDateString());
-            },
-            err => console.log(err));
+        this.contactSubscription = this.observableContact.subscribe(
+            contact =>
+            {
+                this.contact._id = contact._id;
+                this.form.controls['name'].setValue(contact.name);
+                this.form.controls['sex'].setValue(contact.sex);
+                var dob = contact.dob.toLocaleDateString();
+                this.form.controls['dob'].setValue(dob);
+            }
+        );
+        this.store.dispatch(ContactActions.get(id));
     }
     cancel(){
         // something about calling navigate directly causes
@@ -63,16 +74,13 @@ export class View implements OnInit {
     }
     add(){
         this.fillContactFromForm();
-        this.contacts.add(this.contact)
-            .subscribe(x => this.router.navigate(['']),
-            x => console.log(x));
+        this.contact._id = '1';
+        this.store.dispatch(ContactActions.add(this.contact));
+        setTimeout(() => this.router.navigate(['']),1 );
     }
     save(){
         this.fillContactFromForm();
-        this.contacts.save(this.contact)
-            .subscribe(x => this.router.navigate(['']),
-                x => console.log(x));
-
+        this.store.dispatch(ContactActions.update(this.contact));
+        setTimeout(() => this.router.navigate(['']),1 );
     }
-
 }

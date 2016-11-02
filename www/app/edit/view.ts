@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectionStrategy} from '@angular/core';
 import {Contact} from "../models/Contact";
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
@@ -6,6 +6,8 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../state/interfaces/AppState';
 import {ContactActions} from "../state/actions/ContactActions";
 import {Observable, Subscription} from "rxjs";
+import {Phone} from "../models/Phone";
+import {PhoneActions} from "../state/actions/PhoneActions";
 
 @Component({
     moduleId: module.id,
@@ -22,23 +24,34 @@ export class View implements OnInit, OnDestroy {
         this.form = formBuilder.group({
            name: ['',Validators.required],
             sex: ['',Validators.required],
-            dob: [((new Date()).toLocaleDateString()),
+            dob: ['',
                 Validators.compose([ Validators.required, View.isDate])]
         });
+        this.phoneForm = formBuilder.group({
+            phone: ['',Validators.required]
+        });
     }
+
+    isValid():boolean
+    {
+        return this.form.valid;
+    }
+    phones: Array<Phone> = [];
     form: FormGroup;
+    phoneForm: FormGroup;
     static isDate(c: FormControl){
         if(!c.value.match(/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/))
             return {invalidDate:true};
     }
     sexArray: any[] = [{name: 'Male', val: 'M'},{name: 'Female', val: 'F'}];
-    contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
+    contact:Contact = {_id:'', name: '',sex: '', dob: new Date(),phones:[]};
     ngOnInit() {
         this.route.params.subscribe(params => {
             let id = params['id'];
-            if(id){
-                this.getContact(id);
+            if(!id){
+                id = -1;
             }
+            this.getContact(id);
         });
     }
     ngOnDestroy(): void {
@@ -55,6 +68,7 @@ export class View implements OnInit, OnDestroy {
                 this.form.controls['sex'].setValue(contact.sex);
                 var dob = contact.dob.toLocaleDateString();
                 this.form.controls['dob'].setValue(dob);
+                this.phones = contact.phones;
             }
         );
         this.store.dispatch(ContactActions.get(id));
@@ -71,6 +85,7 @@ export class View implements OnInit, OnDestroy {
         this.contact.dob = new Date(this.form.controls['dob'].value);
         this.contact.name = this.form.controls['name'].value;
         this.contact.sex = this.form.controls['sex'].value;
+        this.contact.phones = this.phones;
     }
     add(){
         this.fillContactFromForm();
@@ -82,5 +97,10 @@ export class View implements OnInit, OnDestroy {
         this.fillContactFromForm();
         this.store.dispatch(ContactActions.update(this.contact));
         setTimeout(() => this.router.navigate(['']),1 );
+    }
+    addPhone(){
+        var phone:Phone = {phone:this.phoneForm.controls['phone'].value,contactId:this.contact._id};
+        this.phoneForm.controls['phone'].setValue('');
+        this.store.dispatch(PhoneActions.add(phone));
     }
 }

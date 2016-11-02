@@ -12,9 +12,30 @@
                 <div *ngIf="form.controls.dob.hasError('required')" class="alert alert-danger">DOB is required</div>
                 <div *ngIf="form.controls.dob.hasError('invalidDate')" class="alert alert-danger">DOB should be a date</div>
             </text-field>
-            <button *ngIf="contact._id.length === 0" (click)="add()" class="btn btn-primary pull-right" [disabled]="!form.valid"><span class="fa fa-plus"></span> Add</button>
-            <button *ngIf="contact._id.length > 0" (click)="save()" class="btn btn-primary pull-right" [disabled]="!form.valid"><span class="fa fa fa-floppy-o"></span> Save</button>
-            <button (click)="cancel()" class="btn btn-default pull-right"><span class="fa fa fa-ban"></span> Cancel</button>
         </form>
+        <form class="form-horizontal" [formGroup]="phoneForm">
+            <fieldset><label>Phone Numbers</label>
+                <div class="col-lg-10">
+                    <text-field fieldLabel="Phone:" formControlName="phone">
+                    </text-field>
+                </div>
+                <div class="col-lg-2">
+                    <button (click)="addPhone()" class="btn btn-default pull-right" [disabled]="!phoneForm.controls['phone'].valid"><span class="fa fa-plus"></span> Add</button>
+                </div>
+                <div class="col-lg-12">
+                    <ol>
+                        <li *ngFor="let phone of (phones)">
+                            {{phone.phone}}
+                        </li>
+                    </ol>
+
+                </div>
+            </fieldset>
+        </form>
+        <div class="col-lg-12">
+            <button *ngIf="contact._id.length === 0" (click)="add()" class="btn btn-primary pull-right" [disabled]="!isValid()"><span class="fa fa-plus"></span> Add</button>
+            <button *ngIf="contact._id.length > 0" (click)="save()" class="btn btn-primary pull-right" [disabled]="!isValid()"><span class="fa fa fa-floppy-o"></span> Save</button>
+            <button (click)="cancel()" class="btn btn-default pull-right"><span class="fa fa fa-ban"></span> Cancel</button>
+        </div>
     </div>
 </div>

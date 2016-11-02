@@ -27,7 +27,7 @@ export class ContactActions {
     }
 
     static GET = 'ContactActions.5';
-    static get(id: number){
+    static get(id: number = -1){
         return {type: ContactActions.GET, payload: id}
     }
 

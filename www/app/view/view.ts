@@ -27,7 +27,6 @@ export class View implements OnInit {
         this.router.navigate(['add']);
     }
     edit(id){
-        console.log('View - id: ' + JSON.stringify(id));
         this.router.navigate(['edit', id]);
     }
     remove(id){

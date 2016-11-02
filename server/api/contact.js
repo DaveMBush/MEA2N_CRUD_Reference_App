@@ -1,3 +1,4 @@
+var Phone = require('../models/phone');
 var Contact = require('../models/contact');
 var express = require('express');
 var router = express.Router();
@@ -9,6 +10,9 @@ router.route('/contact/:id')
                 return;
             }
             res.setHeader('Content-Type', 'application/json');
+            if(!contact._doc.phones){
+                contact._doc.phones = [];
+            }
             res.json(contact);
         });
     })
@@ -20,9 +24,11 @@ router.route('/contact/:id')
             contact.name = req.body.name;
             contact.sex = req.body.sex;
             contact.dob = req.body.dob;
+            contact.phones = req.body.phones;
             contact.save(function(err){
                 if(err){
                     res.send(err);
+                    return;
                 }
                 res.json({result:'OK'});
             });
@@ -44,6 +50,7 @@ router.route('/contact')
         contact.name = req.body.name;  // set the bears name (comes from the request)
         contact.sex = req.body.sex;
         contact.dob = req.body.dob;
+        contact.phones = req.body.phones;
 
         contact.save(function(err) {
             if (err)
@@ -58,6 +65,11 @@ router.route('/contact')
                 res.send(err);
             }
             res.setHeader('Content-Type', 'application/json');
+            for(var contactIndex = 0;contactIndex < contacts.length;contactIndex++){
+                if(!contacts[contactIndex]._doc.phones){
+                    contacts[contactIndex]._doc.phones = [];
+                }
+            }
             res.json(contacts);
         })
     });

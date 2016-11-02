@@ -21,6 +21,10 @@ export class Contacts {
             .map((contacts: Array<Contact>) => contacts );
     }
     get(id): Observable<Contact>{
+        if(id < 0){
+            return Observable.from([{_id:'', name: '',sex: '', dob: new Date(),phones:[]}])
+                .map((contact: Contact)=> contact);
+        }
         return this.http.get(this.baseUrl + id)
             .map(res =>{
                 return res.json();

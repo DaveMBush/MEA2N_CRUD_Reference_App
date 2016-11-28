@@ -21,16 +21,17 @@ export class ContactsEffects{
         .switchMap(contact => this.contacts.add(contact))
         .switchMap(()=>this.contacts.list())
         .map(contacts => ContactActions.listSuccess(contacts));
-    @Effect() removeContact$ = this.update$
-        .ofType(ContactActions.REMOVE)
-        .map(action => action.payload)
-        .switchMap(id => this.contacts.remove(id))
-        .switchMap(()=> this.contacts.list())
-        .map(contacts => ContactActions.listSuccess(contacts));
     @Effect() updateContact$ = this.update$
         .ofType(ContactActions.UPDATE)
         .map(action => action.payload)
         .switchMap(contact => this.contacts.save(contact))
         .switchMap(()=>this.contacts.list())
+        .map(contacts => ContactActions.listSuccess(contacts));
+
+    @Effect() removeContact$ = this.update$
+        .ofType(ContactActions.REMOVE)
+        .map(action => action.payload)
+        .switchMap(id => this.contacts.remove(id))
+        .switchMap(()=> this.contacts.list())
         .map(contacts => ContactActions.listSuccess(contacts));
 }

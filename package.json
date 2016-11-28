@@ -26,6 +26,7 @@
     "es6-shim": "^0.35.1",
     "express": "^4.14.0",
     "mongoose": "^4.5.8",
+    "normalizr": "^2.2.1",
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.12",
     "zone.js": "^0.6.17"

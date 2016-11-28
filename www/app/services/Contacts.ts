@@ -22,7 +22,7 @@ export class Contacts {
     }
     get(id): Observable<Contact>{
         if(id < 0){
-            return Observable.from([{_id:'', name: '',sex: '', dob: new Date(),phones:[]}])
+            return Observable.from(<Array<Contact>>[{_id:'', name: '',sex: '', dob: new Date(),phones:[]}])
                 .map((contact: Contact)=> contact);
         }
         return this.http.get(this.baseUrl + id)

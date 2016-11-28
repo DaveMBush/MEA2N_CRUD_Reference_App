@@ -12,6 +12,7 @@ import { ContactsEffects } from './state/effects/ContactsEffects';
 import { ContactEffects } from './state/effects/ContactEffects';
 import {EffectsModule} from "@ngrx/effects";
 import {Contacts} from "./services/Contacts";
+import {PhonesReducer} from "./state/reducers/PhonesReducer";
 
 @NgModule({
     imports: [
@@ -20,7 +21,12 @@ import {Contacts} from "./services/Contacts";
         routing ,
         EditModule,
         ViewModule,
-        StoreModule.provideStore({contacts: ContactsReducer, contact: ContactReducer},[]),
+        StoreModule.provideStore(
+            {
+                contacts: ContactsReducer,
+                contact: ContactReducer,
+                phones: PhonesReducer
+            },[]),
         EffectsModule.run(ContactsEffects),
         EffectsModule.run(ContactEffects)
     ],

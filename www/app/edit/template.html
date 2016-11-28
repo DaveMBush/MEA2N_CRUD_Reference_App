@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-lg-12">
                     <ol>
-                        <li *ngFor="let phone of (phones)">
+                        <li *ngFor="let phone of (phones | async)">
                             {{phone.phone}}
                         </li>
                     </ol>

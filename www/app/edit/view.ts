@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Contact} from "../models/Contact";
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
@@ -21,6 +21,8 @@ export class View implements OnInit, OnDestroy {
                 private store: Store<AppState>
     ){
         this.observableContact = <Observable<Contact>>store.select('contact');
+        this.phones = <Observable<Array<Phone>>>store.select('phones');
+
         this.form = formBuilder.group({
            name: ['',Validators.required],
             sex: ['',Validators.required],
@@ -36,7 +38,7 @@ export class View implements OnInit, OnDestroy {
     {
         return this.form.valid;
     }
-    phones: Array<Phone> = [];
+    phones: Observable<Array<Phone>>;
     form: FormGroup;
     phoneForm: FormGroup;
     static isDate(c: FormControl){
@@ -44,7 +46,7 @@ export class View implements OnInit, OnDestroy {
             return {invalidDate:true};
     }
     sexArray: any[] = [{name: 'Male', val: 'M'},{name: 'Female', val: 'F'}];
-    contact:Contact = {_id:'', name: '',sex: '', dob: new Date(),phones:[]};
+    contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
     ngOnInit() {
         this.route.params.subscribe(params => {
             let id = params['id'];
@@ -66,11 +68,11 @@ export class View implements OnInit, OnDestroy {
                 this.contact._id = contact._id;
                 this.form.controls['name'].setValue(contact.name);
                 this.form.controls['sex'].setValue(contact.sex);
-                var dob = contact.dob.toLocaleDateString();
+                let dob = contact.dob.toLocaleDateString();
                 this.form.controls['dob'].setValue(dob);
-                this.phones = contact.phones;
             }
         );
+
         this.store.dispatch(ContactActions.get(id));
     }
     cancel(){
@@ -85,7 +87,8 @@ export class View implements OnInit, OnDestroy {
         this.contact.dob = new Date(this.form.controls['dob'].value);
         this.contact.name = this.form.controls['name'].value;
         this.contact.sex = this.form.controls['sex'].value;
-        this.contact.phones = this.phones;
+        let me = this;
+        this.phones.subscribe((phones) => me.contact.phones = phones);
     }
     add(){
         this.fillContactFromForm();
@@ -99,7 +102,7 @@ export class View implements OnInit, OnDestroy {
         setTimeout(() => this.router.navigate(['']),1 );
     }
     addPhone(){
-        var phone:Phone = {phone:this.phoneForm.controls['phone'].value,contactId:this.contact._id};
+        let phone:Phone = {phone:this.phoneForm.controls['phone'].value,contactId:this.contact._id};
         this.phoneForm.controls['phone'].setValue('');
         this.store.dispatch(PhoneActions.add(phone));
     }

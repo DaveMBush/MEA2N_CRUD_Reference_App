@@ -48,6 +48,16 @@ export class View implements OnInit, OnDestroy {
     sexArray: any[] = [{name: 'Male', val: 'M'},{name: 'Female', val: 'F'}];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
     ngOnInit() {
+        this.form.valueChanges.subscribe((value)=>{
+            let phones = this.contact.phones;
+            this.contact = Object.assign({},this.contact,value);
+            this.contact.phones = phones;
+            console.log('contact:'+JSON.stringify(this.contact));
+        });
+        this.phones.subscribe((phones)=>{
+            this.contact.phones = phones;
+            console.log('phones:'+JSON.stringify(this.contact));
+        });
         this.route.params.subscribe(params => {
             let id = params['id'];
             if(!id){
@@ -66,10 +76,11 @@ export class View implements OnInit, OnDestroy {
             contact =>
             {
                 this.contact._id = contact._id;
-                this.form.controls['name'].setValue(contact.name);
-                this.form.controls['sex'].setValue(contact.sex);
-                let dob = contact.dob.toLocaleDateString();
-                this.form.controls['dob'].setValue(dob);
+                this.form.patchValue({
+                    name: contact.name,
+                    sex:contact.sex,
+                    dob:contact.dob.toLocaleDateString()
+                });
             }
         );
 
@@ -83,21 +94,11 @@ export class View implements OnInit, OnDestroy {
         // active?
        setTimeout(() => this.router.navigate(['']),1 );
     }
-    fillContactFromForm(){
-        this.contact.dob = new Date(this.form.controls['dob'].value);
-        this.contact.name = this.form.controls['name'].value;
-        this.contact.sex = this.form.controls['sex'].value;
-        let me = this;
-        this.phones.subscribe((phones) => me.contact.phones = phones);
-    }
     add(){
-        this.fillContactFromForm();
-        this.contact._id = '1';
         this.store.dispatch(ContactActions.add(this.contact));
         setTimeout(() => this.router.navigate(['']),1 );
     }
     save(){
-        this.fillContactFromForm();
         this.store.dispatch(ContactActions.update(this.contact));
         setTimeout(() => this.router.navigate(['']),1 );
     }

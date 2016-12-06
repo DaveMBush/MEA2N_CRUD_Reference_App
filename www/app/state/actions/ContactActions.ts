@@ -33,6 +33,9 @@ export class ContactActions {
 
     static GET_SUCCESS = 'ContactActions.5.s';
     static getSuccess(contact: Contact){
+        if(contact._id === ''){
+            contact._id = '-1';
+        }
         return {type: ContactActions.GET_SUCCESS, payload: contact}
     }
 

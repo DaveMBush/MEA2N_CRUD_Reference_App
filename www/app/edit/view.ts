@@ -1,19 +1,22 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {Contact} from "../models/Contact";
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {AppState} from '../state/interfaces/AppState';
 import {ContactActions} from "../state/actions/ContactActions";
-import {Observable, Subscription} from "rxjs";
+import {Observable, Subscription, Subject} from "rxjs";
 import {Phone} from "../models/Phone";
 import {PhoneActions} from "../state/actions/PhoneActions";
+const deepAssign = require('deep-assign');
 
 @Component({
     moduleId: module.id,
     templateUrl: 'template.html'
 })
-export class View implements OnInit, OnDestroy {
+export class View implements OnInit {
+    @ViewChild('addPhone', {read:ElementRef}) addPhone: ElementRef;
+    @ViewChild('top', {read:ElementRef}) top: ElementRef;
     private observableContact: Observable<Contact>;
     private contactSubscription: Subscription;
     constructor(private router:Router, private route:ActivatedRoute,
@@ -47,63 +50,84 @@ export class View implements OnInit, OnDestroy {
     }
     sexArray: any[] = [{name: 'Male', val: 'M'},{name: 'Female', val: 'F'}];
     contact:Contact = {_id:'', name: '',sex: '', dob: new Date()};
+    phone:Phone = {contactId:'',phone:''};
     ngOnInit() {
-        this.route.params.subscribe(params => {
-            let id = params['id'];
-            if(!id){
-                id = -1;
-            }
-            this.getContact(id);
+        this.listenToForms();
+
+        this.handleButtons();
+
+        this.getData();
+    }
+
+    private handleButtons():void {
+        let clickObserver = Observable.fromEvent(this.top.nativeElement,'click');
+
+        let parts = clickObserver.partition(()=>{return event.srcElement.textContent === ' Add' &&
+            !event.srcElement.classList.contains('btn-primary');})
+
+        let addPhone$ = parts[0];
+
+        parts = parts[1].partition(()=>{
+            return event.srcElement.textContent === ' Add' &&
+                event.srcElement.classList.contains('btn-primary');
         });
-    }
-    ngOnDestroy(): void {
-        if(this.contactSubscription){
-            this.contactSubscription.unsubscribe();
-        }
-    }
-    getContact(id){
-        this.contactSubscription = this.observableContact.subscribe(
-            contact =>
-            {
-                this.contact._id = contact._id;
-                this.form.controls['name'].setValue(contact.name);
-                this.form.controls['sex'].setValue(contact.sex);
-                let dob = contact.dob.toLocaleDateString();
-                this.form.controls['dob'].setValue(dob);
+
+        let addContact$ = parts[0];
+
+        parts = parts[1].partition(()=>{
+            return event.srcElement.textContent === ' Save';
+        });
+
+        let saveContact$ = parts[0];
+
+        parts = parts[1].partition(()=>{
+            return event.srcElement.textContent === ' Cancel';
+        });
+
+        let cancel$ = parts[0];
+
+        Observable.merge(cancel$,
+            saveContact$.map(()=>{
+                this.store.dispatch(ContactActions.update(this.contact));
+            }),
+            addContact$.map(()=>{
+                this.store.dispatch(ContactActions.add(this.contact));
+            })).subscribe(()=>{
+                this.router.navigate(['']);
             }
         );
 
-        this.store.dispatch(ContactActions.get(id));
+
+        addPhone$.subscribe(()=>{
+            this.store.dispatch(PhoneActions.add(this.phone));
+            this.phoneForm.patchValue({phone:''});
+        });
     }
-    cancel(){
-        // something about calling navigate directly causes
-        // the root page to completely refresh.  setTimeout
-        // keeps it refreshing in place.  I suspect it has
-        // something to do with the event still being
-        // active?
-       setTimeout(() => this.router.navigate(['']),1 );
+
+    private getData():void{
+        this.contactSubscription = this.observableContact.subscribe(
+            contact => {
+                this.contact._id = contact._id;
+                this.form.patchValue({
+                    name: contact.name,
+                    sex:contact.sex,
+                    dob:contact.dob.toLocaleDateString()
+                });
+            });
+        this.route.params.subscribe(params => {
+            this.store.dispatch(ContactActions.get(params['id'] ? params['id'] : '-1'));
+        });
     }
-    fillContactFromForm(){
-        this.contact.dob = new Date(this.form.controls['dob'].value);
-        this.contact.name = this.form.controls['name'].value;
-        this.contact.sex = this.form.controls['sex'].value;
-        let me = this;
-        this.phones.subscribe((phones) => me.contact.phones = phones);
-    }
-    add(){
-        this.fillContactFromForm();
-        this.contact._id = '1';
-        this.store.dispatch(ContactActions.add(this.contact));
-        setTimeout(() => this.router.navigate(['']),1 );
-    }
-    save(){
-        this.fillContactFromForm();
-        this.store.dispatch(ContactActions.update(this.contact));
-        setTimeout(() => this.router.navigate(['']),1 );
-    }
-    addPhone(){
-        let phone:Phone = {phone:this.phoneForm.controls['phone'].value,contactId:this.contact._id};
-        this.phoneForm.controls['phone'].setValue('');
-        this.store.dispatch(PhoneActions.add(phone));
+
+    private listenToForms(): void {
+        this.form.valueChanges.subscribe((value)=>{
+            this.contact = deepAssign({},this.contact,value);
+        });
+        this.phoneForm.valueChanges.subscribe((value)=>{
+            this.phone = deepAssign({},this.phone,value);
+        });
+        this.phones.subscribe((phones)=>{
+            this.contact.phones = phones;
+        });
     }
 }

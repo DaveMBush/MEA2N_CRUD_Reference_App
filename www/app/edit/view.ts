@@ -60,6 +60,8 @@ export class View implements OnInit {
     }
 
     private handleButtons():void {
+
+        // sure is a lot of work to get what amounts to a switch statement.
         let clickObserver = Observable.fromEvent(this.top.nativeElement,'click');
 
         let parts = clickObserver.partition(()=>{return event.srcElement.textContent === ' Add' &&
@@ -86,16 +88,17 @@ export class View implements OnInit {
 
         let cancel$ = parts[0];
 
-        Observable.merge(cancel$,
+        Observable.merge(
+            cancel$,
             saveContact$.map(()=>{
                 this.store.dispatch(ContactActions.update(this.contact));
             }),
             addContact$.map(()=>{
                 this.store.dispatch(ContactActions.add(this.contact));
-            })).subscribe(()=>{
-                this.router.navigate(['']);
-            }
-        );
+            })
+        ).subscribe(()=>{
+            this.router.navigate(['']);
+        });
 
 
         addPhone$.subscribe(()=>{

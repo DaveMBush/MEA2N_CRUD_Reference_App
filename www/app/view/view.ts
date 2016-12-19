@@ -7,7 +7,6 @@ import {AppState} from '../state/interfaces/AppState';
 import {Contact} from "../models/Contact";
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'template.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

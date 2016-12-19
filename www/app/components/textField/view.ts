@@ -13,7 +13,6 @@ const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR = {
 
 @Component({
     selector: 'text-field',
-    moduleId: module.id,
     templateUrl: 'template.html',
     // turn off the require indicator on the hosting element.
     inputs: ['fieldLabel', 'value'],

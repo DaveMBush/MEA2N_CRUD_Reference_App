@@ -5,13 +5,12 @@ import {FormGroup, Validators, FormBuilder, FormControl} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {AppState} from '../state/interfaces/AppState';
 import {ContactActions} from "../state/actions/ContactActions";
-import {Observable, Subscription, Subject} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Phone} from "../models/Phone";
 import {PhoneActions} from "../state/actions/PhoneActions";
 const deepAssign = require('deep-assign');
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'template.html'
 })
 export class View implements OnInit {
@@ -65,7 +64,7 @@ export class View implements OnInit {
         let clickObserver = Observable.fromEvent(this.top.nativeElement,'click');
 
         let parts = clickObserver.partition(()=>{return event.srcElement.textContent === ' Add' &&
-            !event.srcElement.classList.contains('btn-primary');})
+            !event.srcElement.classList.contains('btn-primary');});
 
         let addPhone$ = parts[0];
 

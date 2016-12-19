@@ -10,49 +10,40 @@ module.exports = {
     },
     devtool: 'source-map',
     resolve:{
-        extensions: ['','.ts','.js']
+        extensions: ['.ts','.js']
     },
     module:{
-        loaders: [
+        rules: [
             {
                 test: /\.ts$/,
-                loader: 'string-replace-loader',
-                query: {
-                    search: 'moduleId:.module.id,',
-                    replace: '',
-                    flags: 'g'
-                }
-            },
-            {
-                test: /\.ts$/,
-                loaders: ['ts-loader','angular2-template-loader']
+                use: [{loader:'ts-loader'},{loader:'angular2-template-loader'}]
             },
             {
                 test: /\.html$/,
-                loader: 'html-loader'
+                use: [{loader:'html-loader'}]
             },
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-                loader: 'file?name=assets/[name].[hash].[ext]'
+                use: [{loader:'file?name=assets/[name].[hash].[ext]'}]
             },
             {
                 test: /\.css$/,
                 exclude: helpers.root('www', 'app'),
-                loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
+                use: [{loader:ExtractTextPlugin.extract({fallbackLoader: 'style-loader',loader: 'css-loader'})}]
             },
             {
                 test: /\.css$/,
                 include: helpers.root('www', 'app'),
-                loader: 'raw'
+                use: [{loader:'raw'}]
             }
         ]
     },
-    htmlLoader: {
-        minimize: false // workaround for ng2
-    },
     plugins: [
-        new webpack.optimize.DedupePlugin(),
+        new webpack.ContextReplacementPlugin(
+            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/
+        ),
         new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
             mangle: {keep_fnames: true}
         }),
         new ExtractTextPlugin('[name].[hash].css')

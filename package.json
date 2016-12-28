@@ -10,14 +10,14 @@
   "author": "Dave Bush",
   "license": "MIT",
   "dependencies": {
-    "@angular/common": "^2.2.3",
-    "@angular/compiler": "^2.2.3",
-    "@angular/core": "^2.2.3",
-    "@angular/forms": "^2.2.3",
-    "@angular/http": "^2.2.3",
-    "@angular/platform-browser": "^2.2.3",
-    "@angular/platform-browser-dynamic": "^2.2.3",
-    "@angular/router": "^3.2.3",
+    "@angular/common": "^2.4.1",
+    "@angular/compiler": "^2.4.1",
+    "@angular/core": "^2.4.1",
+    "@angular/forms": "^2.4.1",
+    "@angular/http": "^2.4.1",
+    "@angular/platform-browser": "^2.4.1",
+    "@angular/platform-browser-dynamic": "^2.4.1",
+    "@angular/router": "^3.4.1",
     "@ngrx/core": "^1.2.0",
     "@ngrx/store": "^2.2.1",
     "body-parser": "^1.15.2",
@@ -26,10 +26,11 @@
     "es6-promise": "^3.2.1",
     "es6-shim": "^0.35.1",
     "express": "^4.14.0",
+    "immutable": "^3.8.1",
     "mongoose": "^4.5.8",
     "normalizr": "^2.2.1",
     "reflect-metadata": "^0.1.8",
-    "rxjs": "5.0.0-rc.4",
+    "rxjs": "5.0.1",
     "zone.js": "^0.7.2"
   },
   "devDependencies": {
@@ -49,8 +50,7 @@
     "ts-loader": "^1.2.2",
     "typescript": "^2.0.10",
     "typings": "^2.0.0",
-    "webpack": "^2.1.0-beta.25",
-    "webpack-dev-server": "^1.16.2",
+    "webpack": "^2.1.0-beta.28",
     "webpack-merge": "^1.0.1"
   }
 }

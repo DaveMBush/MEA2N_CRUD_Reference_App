@@ -8,6 +8,7 @@ import {ContactActions} from "../state/actions/ContactActions";
 import {Observable, Subscription} from "rxjs";
 import {Phone} from "../models/Phone";
 import {PhoneActions} from "../state/actions/PhoneActions";
+import {List} from "immutable";
 const deepAssign = require('deep-assign');
 
 @Component({
@@ -23,7 +24,7 @@ export class View implements OnInit {
                 private store: Store<AppState>
     ){
         this.observableContact = <Observable<Contact>>store.select('contact');
-        this.phones = <Observable<Array<Phone>>>store.select('phones');
+        this.phones = <Observable<List<Phone>>>store.select('phones');
 
         this.form = formBuilder.group({
            name: ['',Validators.required],
@@ -40,7 +41,7 @@ export class View implements OnInit {
     {
         return this.form.valid;
     }
-    phones: Observable<Array<Phone>>;
+    phones: Observable<List<Phone>>;
     form: FormGroup;
     phoneForm: FormGroup;
     static isDate(c: FormControl){
@@ -129,7 +130,7 @@ export class View implements OnInit {
             this.phone = deepAssign({},this.phone,value);
         });
         this.phones.subscribe((phones)=>{
-            this.contact.phones = phones;
+            this.contact.phones = phones.toArray();
         });
     }
 }

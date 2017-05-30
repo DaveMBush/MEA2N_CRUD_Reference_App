@@ -48,7 +48,8 @@ export class DropdownField implements ControlValueAccessor{
         if (v !== this._value) {
             this._value = v;
             this._onChangeCallback(v);
-        }    }
+        }
+    }
     get value(){
         return this._value;
     }

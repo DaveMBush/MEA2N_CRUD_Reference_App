@@ -60,51 +60,24 @@ export class View implements OnInit {
     }
 
     private handleButtons():void {
-
-        // sure is a lot of work to get what amounts to a switch statement.
         let clickObserver = Observable.fromEvent(this.top.nativeElement,'click');
 
-        let parts = clickObserver.partition(()=>{return event.srcElement.textContent === ' Add' &&
-            !event.srcElement.classList.contains('btn-primary');});
+        clickObserver.filter((x:Event) => x.srcElement.textContent === ' Add' &&
+            !x.srcElement.classList.contains('btn-primary'))
+            .subscribe(() => {
+                this.store.dispatch(PhoneActions.add(this.phone));
+                this.phoneForm.patchValue({phone:''});
+            });
 
-        let addPhone$ = parts[0];
+        clickObserver.filter((x:Event) => x.srcElement.textContent === ' Add' &&
+            x.srcElement.classList.contains('btn-primary'))
+            .subscribe(() => this.store.dispatch(ContactActions.add(this.contact)));
 
-        parts = parts[1].partition(()=>{
-            return event.srcElement.textContent === ' Add' &&
-                event.srcElement.classList.contains('btn-primary');
-        });
+        clickObserver.filter((x:Event) => x.srcElement.textContent === ' Save')
+            .subscribe(() => this.store.dispatch(ContactActions.update(this.contact)));
 
-        let addContact$ = parts[0];
-
-        parts = parts[1].partition(()=>{
-            return event.srcElement.textContent === ' Save';
-        });
-
-        let saveContact$ = parts[0];
-
-        parts = parts[1].partition(()=>{
-            return event.srcElement.textContent === ' Cancel';
-        });
-
-        let cancel$ = parts[0];
-
-        Observable.merge(
-            cancel$,
-            saveContact$.map(()=>{
-                this.store.dispatch(ContactActions.update(this.contact));
-            }),
-            addContact$.map(()=>{
-                this.store.dispatch(ContactActions.add(this.contact));
-            })
-        ).subscribe(()=>{
-            this.router.navigate(['']);
-        });
-
-
-        addPhone$.subscribe(()=>{
-            this.store.dispatch(PhoneActions.add(this.phone));
-            this.phoneForm.patchValue({phone:''});
-        });
+        clickObserver.filter((x:Event) => x.srcElement.textContent === ' Cancel')
+            .subscribe(() => this.router.navigate(['']));
     }
 
     private getData():void{
